@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-Up, Login, and Mining</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sign-Up Form -->
+    <div class="form-container" id="signup-form">
+        <h2>Sign Up</h2>
+        <input type="text" id="signup-username" placeholder="Username">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button onclick="signUp()">Sign Up</button>
+        <p id="signup-error" class="error">Username and password must be entered</p>
+        <a class="toggle-link" onclick="toggleForm()">Already have an account? Log in here</a>
+    </div>
+    <!-- Login Form -->
+    <div class="form-container" id="login-form" style="display: none;">
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" class="error">Username and password must be entered</p>
+        <a class="toggle-link" onclick="toggleForm()">Don't have an account? Sign up here</a>
+    </div>
+    <!-- Mining Container -->
+    <div class="container" id="mining-container" style="display: none;">
+        <div class="top-image">
+            <div class="coin-balance" id="coin-balance">0.00</div>
+            <div class="rate">0.01/sec</div>
+        </div>
+        <div class="mining-started-message" id="mining-started-message">Mining Started</div>
+        <button class="mine-button" id="mine-button" onclick="startMining()">Mine</button>
+        <div class="timer" id="timer">24:00:00</div>
+        <div class="restart-message" id="restart-message">Click below to start mining season again</div>
+        <div class="button-container">
+            <button class="withdraw-button" id="withdraw-button" onclick="withdraw()">Withdraw</button>
+            <button class="whitepaper-button" id="whitepaper-button" onclick="openWhitepaper()">Whitepaper</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
