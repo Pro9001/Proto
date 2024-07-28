@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-Up, Login, and Mining</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .form-container, .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+            display: none;
+        }
+        .form-container.active, .container.active {
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+        .toggle-link {
+            margin-top: 10px;
+            display: block;
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .toggle-link:hover {
+            color: #0056b3;
+        }
+        .coin-balance {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .timer {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .restart-message {
+            color: red;
+            display: none;
+            margin-top: 20px;
+        }
+        .container {
+            position: relative;
+            text-align: center;
+            background-image: url('https://i.ibb.co/n1y6RwH/pnghq-com-plain-purple-background.png');
+            background-size: cover;
+            background-position: center;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            width: 300px;
+            height: 500px;
+        }
+        .top-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 33%;
+            background-image: url('https://i.ibb.co/djbLBDL/abstract-yellow-gradient-background-wallpaper-600nw-2404281297.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .mine-button {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 120px;
+            height: 120px;
+            background-image: url('https://i.ibb.co/ZGWn1Kj/Screenshot-20240728-115406-Whats-App.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: none;
+            outline: none;
+        }
+        .mine-button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .withdraw-button, .whitepaper-button {
+            background-color: #ffcc00;
+            color: black;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .withdraw-button:hover, .whitepaper-button:hover {
+            background-color: #ff9900;
+        }
+        .rate, .mining-started-message {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+        }
+        .coin-balance {
+            font-size: 36px;
+            color: #ffffff;
+        }
+        .rate {
+            margin-top: 120px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        .restart-message {
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: red;
+            display: none;
+        }
+        .mining-started-message {
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #32CD32; /* Parrot Green color */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sign-Up Form -->
+    <div class="form-container" id="signup-form">
+        <h2>Sign Up</h2>
+        <input type="text" id="signup-username" placeholder="Username">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button onclick="signUp()">Sign Up</button>
+        <p id="signup-error" class="error">Username and password must be entered</p>
+        <a class="toggle-link" onclick="toggleForm()">Already have an account? Log in here</a>
+    </div>
+    <!-- Login Form -->
+    <div class="form-container" id="login-form" style="display: none;">
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" class="error">Username and password must be entered</p>
+        <a class="toggle-link" onclick="toggleForm()">Don't have an account? Sign up here</a>
+    </div>
+    <!-- Mining Container -->
+    <div class="container" id="mining-container" style="display: none;">
+        <div class="top-image">
+            <div class="coin-balance" id="coin-balance">0.00</div>
+            <div class="rate">0.01/sec</div>
+        </div>
+        <div class="mining-started-message" id="mining-started-message">Mining Started</div>
+        <button class="mine-button" id="mine-button" onclick="startMining()">Mine</button>
+        <div class="timer" id="timer">24:00:00</div>
+        <div class="restart-message" id="restart-message">Click below to start mining season again</div>
+        <div class="button-container">
+            <button class="withdraw-button" id="withdraw-button" onclick="withdraw()">Withdraw</button>
+            <button class="whitepaper-button" id="whitepaper-button" onclick="openWhitepaper()">Whitepaper</button>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let coinBalance = 0.00;
+        let mining = false;
+        let timeLeft = 24 * 60 * 60; // 24 hours in seconds
+
+        // Load saved progress
+        window.onload = function() {
+            const savedCoinBalance = localStorage.getItem('coinBalance');
+            const savedTimeLeft = localStorage.getItem('timeLeft');
+            const currentUser = localStorage.getItem('currentUser');
+
+            if (currentUser) {
+                showMiningPage();
+                if (savedCoinBalance !== null) {
+                    coinBalance = parseFloat(savedCoinBalance);
+                    document.getElementById('coin-balance').innerText = coinBalance.toFixed(2);
+                }
+
+                if (savedTimeLeft !== null) {
+                    timeLeft = parseInt(savedTimeLeft);
+                    updateTimerDisplay();
+                }
+            } else {
+                document.getElementById('signup-form').style.display = 'block';
+            }
+        }
+
+        function toggleForm() {
+            const signupForm = document.getElementById('signup-form');
+            const loginForm = document.getElementById('login-form');
+            signupForm.style.display = signupForm.style.display === 'none' ? 'block' : 'none';
+            loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function signUp() {
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            const signupError = document.getElementById('signup-error');
+
+            if (!username || !password) {
+                signupError.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('user_' + username, JSON.stringify({ username, password, coinBalance: 10 }));
+            localStorage.setItem('currentUser', username);
+            coinBalance = 10;
+            localStorage.setItem('coinBalance', coinBalance.toFixed(2));
+            signupError.style.display = 'none';
+            showMiningPage();
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const loginError = document.getElementById('login-error');
+
+            if (!username || !password) {
+                loginError.style.display = 'block';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem('user_' + username));
+            if (user && user.password === password) {
+                localStorage.setItem('currentUser', username);
+                coinBalance = user.coinBalance;
+                localStorage.setItem('coinBalance', coinBalance.toFixed(2));
+                loginError.style.display = 'none';
+                showMiningPage();
+            } else {
+                loginError.innerText = 'Invalid username or password';
+                loginError.style.display = 'block';
+            }
+        }
+
+        function showMiningPage() {
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('mining-container').style.display = 'block';
+        }
+
+        function startMining() {
+            if (mining) return;
+            mining = true;
+
+            document.getElementById('restart-message').style.display = 'none';
+            document.getElementById('mining-started-message').style.display = 'block';
+            document.getElementById('coin-balance').style.color = '#32CD32'; // Parrot Green color
+
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    mining = false;
+                    document.getElementById('coin-balance').style.color = 'red';
+                    document.getElementById('restart-message').style.display = 'block';
+                    document.getElementById('mining-started-message').style.display = 'none';
+                    return;
+                }
+
+                timeLeft--;
+                updateTimerDisplay();
+
+                coinBalance += 0.01;
+                document.getElementById('coin-balance').innerText = coinBalance.toFixed(2);
+
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(localStorage.getItem('user_' + currentUser));
+                    user.coinBalance = coinBalance;
+                    localStorage.setItem('user_' + currentUser, JSON.stringify(user));
+                }
+
+                // Save progress
+                localStorage.setItem('coinBalance', coinBalance.toFixed(2));
+                localStorage.setItem('timeLeft', timeLeft);
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function withdraw() {
+            window.location.href = "https://pro9001.github.io/Protocol-/";
+        }
+
+        function openWhitepaper() {
+            window.location.href = "https://pro9001.github.io/Whitepaper-PRTCL/";
+        }
+    </script>
+</body>
+</html>
