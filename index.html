@@ -167,10 +167,10 @@
             display: none;
         }
         .mining-started-message {
-            top: 70%;
+            top: 40%;
             left: 50%;
             transform: translateX(-50%);
-            color: #32CD32; /* Parrot Green color */
+            color: green;
             display: none;
         }
     </style>
@@ -298,7 +298,6 @@
 
             document.getElementById('restart-message').style.display = 'none';
             document.getElementById('mining-started-message').style.display = 'block';
-            document.getElementById('coin-balance').style.color = '#32CD32'; // Parrot Green color
 
             timer = setInterval(() => {
                 if (timeLeft <= 0) {
